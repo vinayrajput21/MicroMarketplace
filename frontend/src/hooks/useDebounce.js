@@ -1,4 +1,3 @@
-// src/hooks/useDebounce.js
 import { useState, useEffect } from 'react';
 
 export const useDebounce = (value, delay = 500) => {
@@ -8,8 +7,6 @@ export const useDebounce = (value, delay = 500) => {
     const handler = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);
-
-    // Cleanup function: cancel the timeout if value or delay changes
     return () => {
       clearTimeout(handler);
     };

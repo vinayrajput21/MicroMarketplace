@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProduct } from '../api/product.api';
-import { addFavorite, removeFavorite } from '../api/favorite.api';
+import { useState, useEffect } from "react";
+import { useParams,useNavigate } from "react-router-dom";
+import { getProduct } from "../api/product.api";
+import { addFavorite, removeFavorite } from "../api/favorite.api";
+import { useAuth } from "../hooks/useAuth";
+import api from "../api/axios";
 
 export default function ProductDetail() {
-  const { id } = useParams();
+const { id } = useParams();
+  const navigate = useNavigate();                    
+  const { user } = useAuth();
   const [product, setProduct] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -29,15 +33,16 @@ export default function ProductDetail() {
       }
       setIsFavorite(!isFavorite);
     } catch (err) {
-      alert('Please login first');
+      alert("Please login first");
     }
   };
 
-  if (!product) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-xl text-gray-600">Loading...</div>
-    </div>
-  );
+  if (!product)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-gray-600">Loading...</div>
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -65,13 +70,32 @@ export default function ProductDetail() {
               onClick={toggleFavorite}
               className={`
                 inline-flex items-center px-6 py-3 rounded-full font-medium text-lg transition-all duration-300
-                ${isFavorite 
-                  ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-400 hover:bg-yellow-200 transform scale-105' 
-                  : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-gray-200'}
+                ${
+                  isFavorite
+                    ? "bg-yellow-100 text-yellow-700 border-2 border-yellow-400 hover:bg-yellow-200 transform scale-105"
+                    : "bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-gray-200"
+                }
               `}
             >
-              {isFavorite ? '★ Favorited' : '☆ Add to Favorites'}
+              {isFavorite ? "★ Favorited" : "☆ Add to Favorites"}
             </button>
+            {user && (
+              <button
+                onClick={async () => {
+                  if (!window.confirm("Delete this product?")) return;
+                  try {
+                    await api.delete(`/products/${id}`);
+                    alert("Product deleted");
+                    navigate("/products");
+                  } catch (err) {
+                    alert("Failed to delete");
+                  }
+                }}
+                className="ml-4 px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Delete Product
+              </button>
+            )}
           </div>
         </div>
       </div>

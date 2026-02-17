@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { getProducts } from '../api/product.api';
 import Pagination from '../components/common/Pagination';
 import { useDebounce } from '../hooks/useDebounce';
 import Loader from '../components/common/Loader';
-import ProductCard from '../components/ProductCard'; // ← assuming you created this
+import ProductCard from '../components/ProductCard'; 
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -14,7 +13,7 @@ export default function ProductList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const debouncedSearch = useDebounce(search, 500); // 500ms is usually enough
+  const debouncedSearch = useDebounce(search, 500); 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,10 +21,10 @@ export default function ProductList() {
       setError(null);
 
       try {
-        const { data } = await getProducts({
+        const { data } = await getProducts({ 
           search: debouncedSearch.trim(),
           page,
-          limit: 12, // you can make this configurable if needed
+          limit: 12, 
         });
 
         setProducts(data.products || []);
@@ -46,13 +45,12 @@ export default function ProductList() {
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    setPage(1); // reset to first page on new search
+    setPage(1); 
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        {/* Search Bar */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h1 className="text-3xl font-bold text-gray-900">Products</h1>
 
@@ -70,7 +68,6 @@ export default function ProductList() {
           </div>
         </div>
 
-        {/* Loading / Error / Content */}
         {loading ? (
           <Loader size="large" message="Loading products..." />
         ) : error ? (
@@ -123,7 +120,6 @@ export default function ProductList() {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="mt-12 flex justify-center">
                 <Pagination

@@ -1,12 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { getProducts, getProductById, createProduct } = require('../controllers/product.controller');
 const protect = require('../middlewares/auth.middleware');
 
+const {
+  createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+} = require('../controllers/product.controller');
+
+// Public routes (anyone can read)
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 
-// Optional — protect if you want only logged-in users to create
+// Protected routes (only logged-in users — in real app you'd add admin check)
 router.post('/', protect, createProduct);
+router.put('/:id', protect, updateProduct);
+router.delete('/:id', protect, deleteProduct);
 
 module.exports = router;
