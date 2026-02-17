@@ -33,41 +33,48 @@ export default function ProductDetail() {
     }
   };
 
-  if (!product) return <div>Loading...</div>;
+  if (!product) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-xl text-gray-600">Loading...</div>
+    </div>
+  );
 
   return (
-    <div className="product-detail">
-      <img src={product.image} alt={product.title} width="400" />
-      <h1>{product.title}</h1>
-      <h2>₹{product.price}</h2>
-      <p>{product.description}</p>
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="md:flex">
+          <div className="md:flex-shrink-0">
+            <img
+              src={product.image}
+              alt={product.title}
+              className="h-80 w-full object-cover md:w-96"
+            />
+          </div>
+          <div className="p-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              {product.title}
+            </h1>
+            <p className="text-4xl font-bold text-blue-600 mb-6">
+              ₹{product.price.toLocaleString()}
+            </p>
+            <p className="text-gray-700 text-lg leading-relaxed mb-8">
+              {product.description}
+            </p>
 
-      <button
-        onClick={toggleFavorite}
-        className={`favorite-btn ${isFavorite ? 'active' : ''}`}
-      >
-        {isFavorite ? '★ Favorited' : '☆ Favorite'}
-      </button>
-
-      {/* CSS animation example */}
-      <style>{`
-        .favorite-btn {
-          padding: 10px 20px;
-          font-size: 1.1rem;
-          cursor: pointer;
-          transition: all 0.3s;
-        }
-        .favorite-btn.active {
-          background: #ffeb3b;
-          transform: scale(1.1);
-          animation: pulse 0.6s;
-        }
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.3); }
-          100% { transform: scale(1.1); }
-        }
-      `}</style>
+            <button
+              onClick={toggleFavorite}
+              className={`
+                inline-flex items-center px-6 py-3 rounded-full font-medium text-lg transition-all duration-300
+                ${isFavorite 
+                  ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-400 hover:bg-yellow-200 transform scale-105' 
+                  : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-gray-200'}
+              `}
+            >
+              {isFavorite ? '★ Favorited' : '☆ Add to Favorites'}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

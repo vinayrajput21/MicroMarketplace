@@ -1,9 +1,9 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from '../pages/Login';
-import Register from '../pages/Register'; // create similar to Login
-import ProductList from '../pages/ProductList';
-import ProductDetail from '../pages/ProductDetail';
-// import Favorites from '../pages/Favorites'; // optional
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "../pages/Login";
+import Register from "../pages/Register"; // create similar to Login
+import ProductList from "../pages/ProductList";
+import ProductDetail from "../pages/ProductDetail";
+import Favorites from "../pages/Favorites";
 
 export default function AppRoutes() {
   return (
@@ -13,7 +13,14 @@ export default function AppRoutes() {
       <Route path="/register" element={<Register />} />
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/:id" element={<ProductDetail />} />
-      {/* <Route path="/favorites" element={<Favorites />} /> */}
+      <Route
+        path="/favorites"
+        element={
+          <ProtectedRoute>
+            <Favorites />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
