@@ -10,7 +10,6 @@ const {
   deleteProduct,
 } = require('../controllers/product.controller');
 
-// Public routes (anyone can read)
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 

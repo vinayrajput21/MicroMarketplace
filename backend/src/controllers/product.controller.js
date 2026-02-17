@@ -1,7 +1,6 @@
 const Product = require('../models/product.model');
 const mongoose = require('mongoose');
 
-// CREATE - only authenticated users (admin-like for this assignment)
 exports.createProduct = async (req, res) => {
   try {
     const { title, price, description, image } = req.body;
@@ -14,7 +13,7 @@ exports.createProduct = async (req, res) => {
       title,
       price: Number(price),
       description,
-      image: image || 'https://picsum.photos/300/200?random=999', // fallback
+      image: image || 'https://picsum.photos/300/200?random=999', 
     });
 
     res.status(201).json(product);
@@ -23,7 +22,6 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// READ ALL - with search + pagination (already good, small cleanup)
 exports.getProducts = async (req, res) => {
   try {
     const { search, page = 1, limit = 12 } = req.query;
@@ -47,7 +45,6 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// READ ONE
 exports.getProductById = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -65,7 +62,6 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-// UPDATE
 exports.updateProduct = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -74,7 +70,7 @@ exports.updateProduct = async (req, res) => {
 
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { $set: req.body }, // only update fields that are sent
+      { $set: req.body },
       { new: true, runValidators: true }
     );
 
@@ -88,7 +84,6 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// DELETE
 exports.deleteProduct = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
