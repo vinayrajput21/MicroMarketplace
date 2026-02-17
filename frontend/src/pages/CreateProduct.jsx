@@ -521,7 +521,7 @@ export default function CreateProduct() {
                     <input
                       className="cp-input"
                       type="url" name="image"
-                      placeholder="https://example.com/photo.jpg"
+                      placeholder="https://picsum.photos/300/200?random=999"
                       value={form.image}
                       onChange={handleChange}
                       onFocus={() => setFocused('image')}
