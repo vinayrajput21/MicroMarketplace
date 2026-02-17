@@ -1,8 +1,7 @@
-// src/pages/ProductDetail.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProduct, updateProduct, deleteProduct } from '../api/product.api';
-import { addFavorite, removeFavorite } from '../api/favorite.api';
+import { addFavorite, removeFavorite, getFavorites } from '../api/favorite.api'; // ← add getFavorites
 import { useAuth } from '../hooks/useAuth';
 
 export default function ProductDetail() {
@@ -17,45 +16,75 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch product + check if it's favorited
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchData = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const { data } = await getProduct(id);
-        setProduct(data);
+        // 1. Get product details
+        const { data: productData } = await getProduct(id);
+        setProduct(productData);
         setForm({
-          title: data.title,
-          price: data.price,
-          description: data.description,
-          image: data.image || '',
+          title: productData.title,
+          price: productData.price,
+          description: productData.description,
+          image: productData.image || '',
         });
+
+        // 2. Get user's favorites and check if this product is in it
+        const { data: favorites } = await getFavorites();
+        
+        // Assuming favorites is array of product objects or IDs
+        // Adjust based on what your backend actually returns
+        const isFav = favorites.some(fav => 
+          fav._id === id || fav.toString() === id
+        );
+        setIsFavorite(isFav);
       } catch (err) {
-        setError('Failed to load product');
+        console.error(err);
+        setError('Failed to load product or favorites');
       } finally {
         setLoading(false);
       }
     };
-    fetchProduct();
-  }, [id]);
+
+    fetchData();
+  }, [id, user]); // Re-run when user changes or id changes
 
   const toggleFavorite = async () => {
-    if (!user) return alert('Please login first');
+    if (!user) {
+      alert('Please login first');
+      return;
+    }
+
     try {
-      if (isFavorite) await removeFavorite(id);
-      else await addFavorite(id);
-      setIsFavorite(!isFavorite);
+      if (isFavorite) {
+        await removeFavorite(id);
+      } else {
+        await addFavorite(id);
+      }
+      setIsFavorite(prev => !prev); // Optimistic update
+      alert(isFavorite ? 'Removed from favorites' : 'Added to favorites');
     } catch (err) {
-      alert('Failed to update favorite');
+      console.error(err);
+      alert('Failed to update favorite status');
+      // Optional: revert optimistic update on error
+      // setIsFavorite(prev => !prev);
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const updated = await updateProduct(id, {
+      const { data: updated } = await updateProduct(id, {
         ...form,
         price: Number(form.price),
       });
-      setProduct(updated.data);
+      setProduct(updated);
       setIsEditing(false);
       alert('Product updated successfully');
     } catch (err) {
@@ -82,7 +111,6 @@ export default function ProductDetail() {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         {isEditing ? (
-          // Edit Form
           <div className="p-8">
             <h2 className="text-2xl font-bold mb-6">Edit Product</h2>
             <form onSubmit={handleUpdate} className="space-y-5">
@@ -131,7 +159,6 @@ export default function ProductDetail() {
             </form>
           </div>
         ) : (
-          // View mode
           <div className="md:flex">
             <div className="md:flex-shrink-0">
               <img
@@ -150,10 +177,10 @@ export default function ProductDetail() {
               <div className="flex flex-wrap gap-4">
                 <button
                   onClick={toggleFavorite}
-                  className={`px-6 py-3 rounded-full font-medium ${
+                  className={`px-6 py-3 rounded-full font-medium transition-all ${
                     isFavorite
-                      ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-400'
-                      : 'bg-gray-100 text-gray-700 border-2 border-gray-300'
+                      ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-400 hover:bg-yellow-200 scale-105'
+                      : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-gray-200'
                   }`}
                 >
                   {isFavorite ? '★ Favorited' : '☆ Favorite'}
