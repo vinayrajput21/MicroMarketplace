@@ -1,9 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
-import Register from "../pages/Register"; // create similar to Login
+import Register from "../pages/Register"; 
 import ProductList from "../pages/ProductList";
 import ProductDetail from "../pages/ProductDetail";
 import Favorites from "../pages/Favorites";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (
