@@ -235,17 +235,6 @@ export default function ProductCard({
           />
           <div className="pc-img-overlay" />
 
-          {/* Fav button */}
-          {showFavoriteButton && (
-            <button
-              className={cn('pc-fav', isFavorited && 'active')}
-              onClick={() => onFavoriteToggle?.(_id)}
-              aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
-            >
-              {isFavorited ? <StarFilled /> : <StarOutline />}
-            </button>
-          )}
-
           {/* Price badge */}
           <div className="pc-price-badge-wrap">
             <span className="pc-price-text">₹{price.toLocaleString('en-IN')}</span>
