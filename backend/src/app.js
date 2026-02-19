@@ -6,12 +6,7 @@ const favoriteRoutes = require('./routes/favorite.routes');
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://micro-marketplace-three.vercel.app/',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
