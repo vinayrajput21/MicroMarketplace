@@ -100,9 +100,11 @@ npm install
 ```
 
 ## backend/.env
+```bash
 PORT=5000
 MONGO_URI=your_mongodb_connection_string_here
 JWT_SECRET=your_very_long_random_secret_key_here
+```
 
 ```bash
 npm run dev
@@ -115,7 +117,9 @@ cd frontend
 npm install
 ```
 ## frontend/.env
+```bash
 VITE_API_URL=http://localhost:5000/api
+```
 
 ```bash
 npm run dev
