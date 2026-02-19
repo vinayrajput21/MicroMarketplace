@@ -7,7 +7,7 @@ const favoriteRoutes = require('./routes/favorite.routes');
 const app = express();
 
 app.use(cors({
-  origin: 'https://micro-marketplace-seven.vercel.app',
+  origin: 'https://micro-marketplace-three.vercel.app/',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
